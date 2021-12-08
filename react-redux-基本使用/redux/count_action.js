@@ -15,6 +15,6 @@ export const createIncrementAsyncAction = (data, delay) => {
   return (dispatch) => {
     setTimeout(() => {
       dispatch(createIncrementAction(data * 1));
-    }, delay);
+    }, 500);
   }
 }
