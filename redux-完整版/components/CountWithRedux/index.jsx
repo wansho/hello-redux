@@ -1,39 +1,53 @@
 import React, { Component } from 'react'
+// 引入 store，用于获取 redux 中保存状态
+import store from '../../redux/store'
+
+import {createIncrementAction, createDecrementAction, createIncrementAsyncAction} from '../../redux/count_action'
 
 export default class CountWithRedux extends Component {
 
   state = {carName: "凡尔赛 C5X"};
 
+  /* componentDidMount(){
+		//检测redux中状态的变化，只要变化，就调用render
+		store.subscribe(()=>{
+			this.setState({})
+		})
+	} */
+
   increment = () => {
     const {value} = this.selectNumber;
-    this.props.increment(value * 1);
+    // dispatch 用于向 redux 发送命令，手动创建的一个 action
+    store.dispatch(createIncrementAction(value * 1));
   }
 
   decrement = () => {
     const {value} = this.selectNumber;
-    this.props.decrement(value * 1);
+    store.dispatch(createDecrementAction(value * 1));
   }
 
   incrementByOdd = () => {
     const {value} = this.selectNumber;
-    const sum = this.props.state;
+    const sum = store.getState();
     if(sum % 2 !== 0){
-      this.props.increment(value * 1);
+      store.dispatch(createIncrementAction(value * 1));
     }
   }
 
   incrementByAsync = () => {
     const {value} = this.selectNumber;
-    this.props.incrementAsync(value * 1, 500);
+    // 将该步骤封装成异步 action
+    // setTimeout(() => {
+    //   store.dispatch(createIncrementAction(value * 1));
+    // }, 500);
+    // 注意，createIncrementAsyncAction 返回的是一个函数！不是一个 action json 对象
+    store.dispatch(createIncrementAsyncAction(value*1, 500));
   }
 
   render() {
-
-    console.log('ui 组件接收到的 props: ', this.props);
-
     return (
       <div>
-        <h1>当前求和为：{this.props.sum}</h1>
+        <h1>当前求和为：{store.getState()}</h1>
         <select ref={ (currentNode) => this.selectNumber = currentNode}>
           <option value = "1">1</option>
           <option value = "2">2</option>

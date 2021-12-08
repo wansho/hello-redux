@@ -1,39 +1,41 @@
 import React, { Component } from 'react'
 
-export default class CountWithRedux extends Component {
+export default class Count extends Component {
 
-  state = {carName: "凡尔赛 C5X"};
+  state = {sum: 0};
 
   increment = () => {
+    const {sum} = this.state;
     const {value} = this.selectNumber;
-    this.props.increment(value * 1);
+    this.setState({sum: sum + value * 1.0});
   }
 
-  decrement = () => {
+  subtract = () => {
+    const {sum} = this.state;
     const {value} = this.selectNumber;
-    this.props.decrement(value * 1);
+    this.setState({sum: sum - value * 1.0});
   }
 
   incrementByOdd = () => {
+    const {sum} = this.state;
     const {value} = this.selectNumber;
-    const sum = this.props.state;
     if(sum % 2 !== 0){
-      this.props.increment(value * 1);
+      this.setState({sum: sum + value * 1.0});
     }
   }
 
   incrementByAsync = () => {
+    const {sum} = this.state;
     const {value} = this.selectNumber;
-    this.props.incrementAsync(value * 1, 500);
+    setTimeout(() => {
+      this.setState({sum: sum + value * 1.0});
+    }, 500);
   }
 
   render() {
-
-    console.log('ui 组件接收到的 props: ', this.props);
-
     return (
       <div>
-        <h1>当前求和为：{this.props.sum}</h1>
+        <h1>当前求和为：{this.state.sum}</h1>
         <select ref={ (currentNode) => this.selectNumber = currentNode}>
           <option value = "1">1</option>
           <option value = "2">2</option>
@@ -41,7 +43,7 @@ export default class CountWithRedux extends Component {
           <option value = "4">4</option>
         </select> &nbsp;
         <button onClick={this.increment}>+</button> &nbsp;
-        <button onClick={this.decrement}>-</button> &nbsp;
+        <button onClick={this.subtract}>-</button> &nbsp;
         <button onClick={this.incrementByOdd}>当前求和为奇数再加</button> &nbsp;
         <button onClick={this.incrementByAsync}>异步加</button> &nbsp;
       </div>
